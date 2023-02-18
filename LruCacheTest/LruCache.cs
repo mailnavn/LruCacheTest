@@ -16,5 +16,46 @@ namespace LruCacheTest
         }
 
 
+        public bool TryGetValue(TKey key, out TVal value)
+        {
+            if (_cache.TryGetValue(key, out var node))
+            {
+                if (node != null)
+                {
+                    value = node.Value.Value;
+                    _linkedList.Remove(node);
+                    _linkedList.AddFirst(node);
+                    return true;
+                }
+
+            }
+            value = default(TVal)!;
+            return false;
+        }
+
+        public void AddOrUpdate(TKey key, TVal value)
+        {
+            var kvp = new KeyValuePair<TKey, TVal>(key, value);
+            if (_cache.TryGetValue(key, out var node))
+            {
+                if (node == null) return;
+                _linkedList.Remove(node);
+                _linkedList.AddFirst(node);
+                node.Value = kvp;
+                return;
+            }
+
+            while (_cache.Count >= _capacity)
+            {
+                var last = _linkedList.Last;
+                _linkedList.RemoveLast();
+                if (last != null) _cache.TryRemove(last.Value.Key, out _);
+            }
+
+            var newNode = _linkedList.AddFirst(kvp);
+            _cache.TryAdd(key, newNode);
+        }
+
+
     }
 }
