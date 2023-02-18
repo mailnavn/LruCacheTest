@@ -12,7 +12,7 @@ namespace LruCacheUnitTests
             cache.AddOrUpdate(2, "two");
             cache.AddOrUpdate(3, "three");
 
-            var result = cache.TryGetValue(2, out string value);
+            var result = cache.TryGetValue(2, out var value);
 
             // Assert
             Assert.True(result);
@@ -27,11 +27,11 @@ namespace LruCacheUnitTests
             cache.AddOrUpdate(2, "two");
             cache.AddOrUpdate(3, "three");
 
-            var result = cache.TryGetValue(4, out string value);
+            var result = cache.TryGetValue(4, out var value);
 
             // Assert
             Assert.False(result);
-            Assert.Equal(default(string), value);
+            Assert.Equal(default, value);
         }
 
         [Fact]
@@ -42,7 +42,7 @@ namespace LruCacheUnitTests
             cache.AddOrUpdate(1, "one");
 
             // Assert
-            Assert.True(cache.TryGetValue(1, out string value));
+            Assert.True(cache.TryGetValue(1, out var value));
             Assert.Equal("one", value);
         }
 
@@ -55,7 +55,7 @@ namespace LruCacheUnitTests
             cache.AddOrUpdate(1, "new one");
 
             // Assert
-            Assert.True(cache.TryGetValue(1, out string value));
+            Assert.True(cache.TryGetValue(1, out var value));
             Assert.Equal("new one", value);
         }
 
