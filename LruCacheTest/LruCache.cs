@@ -2,7 +2,7 @@
 
 namespace LruCacheTest
 {
-    public class LruCache<TKey, TVal> where TKey : notnull
+    public class LruCache<TKey, TVal> : ILruCache<TKey, TVal> where TKey : notnull
     {
         public LruCache(int capacity)
         {
@@ -10,7 +10,6 @@ namespace LruCacheTest
             _cache = new ConcurrentDictionary<TKey, LinkedListNode<KeyValuePair<TKey, TVal>>?>();
             _linkedList = new LinkedList<KeyValuePair<TKey, TVal>>();
         }
-
 
         public bool TryGetValue(TKey key, out TVal value)
         {
